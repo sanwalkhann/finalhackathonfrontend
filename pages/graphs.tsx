@@ -11,6 +11,28 @@ interface Article {
   spam_score: number;
 }
 
+interface ApexOptions {
+  chart: {
+    id: string;
+    toolbar: {
+      show: boolean;
+    };
+  };
+  xaxis: {
+    type: string;
+    categories: string[];
+    labels: {
+      show: boolean;
+    };
+  };
+  yaxis: Array<{ title: { text: string }; opposite?: boolean }>;
+  title: {
+    text: string;
+    align?: 'center' | 'left' | 'right' | undefined;
+  };
+  series: Array<{ name: string; type: string; data: Array<number> }>;
+}
+
 const GraphPage: React.FC = () => {
   const [data, setData] = useState<Article[]>([]);
   const router = useRouter();
@@ -42,49 +64,42 @@ const GraphPage: React.FC = () => {
     router.push('/');
   };
 
-  const lineChartData = {
-    options: {
-      chart: {
-        id: 'article-chart',
-        toolbar: {
-          show: false
+  const lineChartData: any = {
+    chart: {
+      id: 'article-chart',
+      toolbar: {
+        show: false
+      }
+    },
+    xaxis: {
+      type: 'category', // Set type to 'category'
+      categories: data.map(article => article.title),
+      labels: {
+        show: false
+      }
+    },
+    yaxis: [
+      {
+        title: {
+          text: 'Participants Count'
         }
       },
-      xaxis: {
-        type: 'category',
-        categories: data.map(article => article.title),
-        labels: {
-          show: false
+      {
+        opposite: true,
+        title: {
+          text: 'Domain Rank'
         }
       },
-      yaxis: [
-        {
-          title: {
-            text: 'Participants Count'
-          }
-        },
-        {
-          opposite: true,
-          title: {
-            text: 'Domain Rank'
-          }
-        },
-        {
-          opposite: true,
-          title: {
-            text: 'Spam Score'
-          }
-        }
-      ],
-      title: {
-        text: 'Article Statistics',
-        align: 'center' as 'center', // Explicitly type align as 'center'
-        style: {
-          fontSize: '20px',
-          color: '#333'
+      {
+        opposite: true,
+        title: {
+          text: 'Spam Score'
         }
       }
-      
+    ],
+    title: {
+      text: 'Article Statistics',
+      align: 'center' // Set align to 'center'
     },
     series: [
       {
@@ -104,38 +119,28 @@ const GraphPage: React.FC = () => {
       }
     ]
   };
-  
-  
-  
-
-  const bubbleChartData = {
-    options: {
-      chart: {
-        id: 'bubble-chart',
-        toolbar: {
-          show: false
-        }
-      },
-      xaxis: {
-        type: 'category',
-        categories: data.map(article => article.title),
-        labels: {
-          show: false
-        }
-      },
-      yaxis: {
-        title: {
-          text: 'Participants Count'
-        }
-      },
-      title: {
-        text: 'Article Statistics (Bubble Chart)',
-        align: 'center',
-        style: {
-          fontSize: '20px',
-          color: '#333'
-        }
+  const bubbleChartData: any = {
+    chart: {
+      id: 'bubble-chart',
+      toolbar: {
+        show: false
       }
+    },
+    xaxis: {
+      type: 'category', // Set type to 'category'
+      categories: data.map(article => article.title),
+      labels: {
+        show: false
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Participants Count'
+      }
+    },
+    title: {
+      text: 'Article Statistics (Bubble Chart)',
+      align: 'center' // Set align to 'center'
     },
     series: [
       {
@@ -160,7 +165,7 @@ const GraphPage: React.FC = () => {
       <div style={{ flex: 1 }}>
         <h2>Article Statistics (Line Chart)</h2>
         <Chart
-          options={lineChartData.options}
+          options={lineChartData}
           series={lineChartData.series}
           type="line"
           height={400}
@@ -169,7 +174,7 @@ const GraphPage: React.FC = () => {
       <div style={{ flex: 1 }}>
         <h2>Article Statistics (Bubble Chart)</h2>
         <Chart
-          options={bubbleChartData.options}
+          options={bubbleChartData}
           series={bubbleChartData.series}
           type="bubble"
           height={400}
