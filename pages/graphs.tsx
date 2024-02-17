@@ -78,12 +78,13 @@ const GraphPage: React.FC = () => {
       ],
       title: {
         text: 'Article Statistics',
-        align: 'center', // Ensure align property is one of 'center', 'right', 'left', or undefined
+        align: 'center' as 'center', // Explicitly type align as 'center'
         style: {
           fontSize: '20px',
           color: '#333'
         }
       }
+      
     },
     series: [
       {
