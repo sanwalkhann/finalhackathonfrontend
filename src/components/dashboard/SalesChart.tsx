@@ -33,25 +33,8 @@ const SalesChart: React.FC = () => {
     }
   };
 
-  const domainRanks = data.map(item => item.common?.domain_rank);
+  const domainRanks = data.map(item => item.common?.domain_rank || 0);
   const participantsCounts = data.map(item => item.participants_count);
-
-  const replaceUndefinedWithPrevious = (arr: (number | undefined)[]) => {
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] === undefined) {
-        arr[i] = arr[i - 1] as number; // Type assertion
-        // Or, to filter out undefined values:
-        // arr[i] = arr.slice(0, i).reverse().find((val) => val !== undefined) || 0;
-      }
-    }
-  };
-  
-
-  const domainRanksFiltered = domainRanks.filter((rank) => rank !== undefined);
-  const participantsCountsFiltered = participantsCounts.filter((count) => count !== undefined);
-
-  replaceUndefinedWithPrevious(domainRanksFiltered);
-  replaceUndefinedWithPrevious(participantsCountsFiltered);
 
   const chartOptions: ApexOptions = {
     chart: {
@@ -69,7 +52,7 @@ const SalesChart: React.FC = () => {
       width: 1,
     },
     xaxis: {
-      categories: domainRanksFiltered.map(String), // Convert domainRanks to strings
+      categories: domainRanks.map(String), // Convert domainRanks to strings
       title: {
         text: '',
       },
@@ -118,21 +101,19 @@ const SalesChart: React.FC = () => {
       colors: ['#ff0000', '#00ff00'],
     },
   };
-  
 
   const series = [
     {
       name: 'Participants Count',
-      data: participantsCountsFiltered.map((count, index) => ({ x: domainRanksFiltered[index], y: count })),
+      data: participantsCounts.map((count, index) => ({ x: domainRanks[index], y: count })),
       type: 'line',
     },
     {
       name: 'Domain Rank',
-      data: domainRanksFiltered.map((rank, index) => ({ x: domainRanksFiltered[index], y: rank })),
+      data: domainRanks.map((rank, index) => ({ x: domainRanks[index], y: rank })),
       type: 'area',
     },
   ];
-  
 
   return (
     <Card>
