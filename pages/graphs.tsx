@@ -51,7 +51,7 @@ const GraphPage: React.FC = () => {
         }
       },
       xaxis: {
-        type: 'category', // Set type to 'category'
+        type: 'category',
         categories: data.map(article => article.title),
         labels: {
           show: false
@@ -78,7 +78,7 @@ const GraphPage: React.FC = () => {
       ],
       title: {
         text: 'Article Statistics',
-        align: 'center', // Align property can be included if necessary
+        align: 'center', // Ensure align property is one of 'center', 'right', 'left', or undefined
         style: {
           fontSize: '20px',
           color: '#333'
@@ -103,6 +103,7 @@ const GraphPage: React.FC = () => {
       }
     ]
   };
+  
   
   
 
