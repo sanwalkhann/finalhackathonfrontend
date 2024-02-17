@@ -78,7 +78,6 @@ const GraphPage: React.FC = () => {
       ],
       title: {
         text: 'Article Statistics',
-        align: 'center',
         style: {
           fontSize: '20px',
           color: '#333'
@@ -103,6 +102,7 @@ const GraphPage: React.FC = () => {
       }
     ]
   };
+  
 
   const bubbleChartData = {
     options: {
