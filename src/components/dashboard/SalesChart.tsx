@@ -33,8 +33,25 @@ const SalesChart: React.FC = () => {
     }
   };
 
-  const domainRanks = data.map(item => item.common?.domain_rank).filter(Boolean);
+  const domainRanks = data.map(item => item.common?.domain_rank);
   const participantsCounts = data.map(item => item.participants_count);
+
+  const replaceUndefinedWithPrevious = (arr: (number | undefined)[]) => {
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] === undefined) {
+        arr[i] = arr[i - 1] as number; // Type assertion
+        // Or, to filter out undefined values:
+        // arr[i] = arr.slice(0, i).reverse().find((val) => val !== undefined) || 0;
+      }
+    }
+  };
+  
+
+  const domainRanksFiltered = domainRanks.filter((rank) => rank !== undefined);
+  const participantsCountsFiltered = participantsCounts.filter((count) => count !== undefined);
+
+  replaceUndefinedWithPrevious(domainRanksFiltered);
+  replaceUndefinedWithPrevious(participantsCountsFiltered);
 
   const chartOptions: ApexOptions = {
     chart: {
@@ -52,7 +69,7 @@ const SalesChart: React.FC = () => {
       width: 1,
     },
     xaxis: {
-      categories: domainRanks,
+      categories: domainRanksFiltered.map(String), // Convert domainRanks to strings
       title: {
         text: '',
       },
@@ -80,14 +97,14 @@ const SalesChart: React.FC = () => {
       shared: false,
       x: {
         show: true,
-        formatter: (val: string) => `Domain Rank: ${val}`,
+        formatter: (val: number) => `Domain Rank: ${val}`, // Use val as a number
       },
       y: [
         {
-          formatter: (val: number) => `Participants Count: ${val}`,
+          formatter: (val: number) => `Participants Count: ${val}`, // Use val as a number
         },
         {
-          formatter: (val: number) => `Domain Rank: ${val}`,
+          formatter: (val: number) => `Domain Rank: ${val}`, // Use val as a number
         },
       ],
     },
@@ -98,24 +115,24 @@ const SalesChart: React.FC = () => {
     },
     markers: {
       size: 1,
-      colors: ['#00ff00', '#00ff00'],
+      colors: ['#ff0000', '#00ff00'],
     },
   };
+  
 
   const series = [
     {
       name: 'Participants Count',
-      data: participantsCounts,
+      data: participantsCountsFiltered.map((count, index) => ({ x: domainRanksFiltered[index], y: count })),
       type: 'line',
-      yAxis: 0,
     },
     {
       name: 'Domain Rank',
-      data: domainRanks,
+      data: domainRanksFiltered.map((rank, index) => ({ x: domainRanksFiltered[index], y: rank })),
       type: 'area',
-      yAxis: 1,
     },
   ];
+  
 
   return (
     <Card>

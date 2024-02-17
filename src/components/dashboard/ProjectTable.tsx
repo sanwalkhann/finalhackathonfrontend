@@ -21,7 +21,11 @@ interface TableData {
     language: string;
     domain_rank: number;
   };
+  site_url: string; // Add site_url property
+  language: string; // Add language property
+  domainRank: number; // Add domainRank property
 }
+
 
 const ProjectTables: React.FC = () => {
   const [tableData, setTableData] = useState<TableData[]>([]);

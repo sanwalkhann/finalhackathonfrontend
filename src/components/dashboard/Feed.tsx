@@ -11,8 +11,14 @@ import {
 } from "reactstrap";
 import { formatDistanceToNow } from 'date-fns';
 
+interface Feed {
+  author: string;
+  published: string; // Assuming published is a string representing a date
+  // Add other properties as needed
+}
+
 const Feeds = () => {
-  const [feeds, setFeeds] = useState([]);
+  const [feeds, setFeeds] = useState<Feed[]>([]); // Specify Feed[] as the type
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
