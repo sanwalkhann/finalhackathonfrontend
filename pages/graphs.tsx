@@ -129,12 +129,14 @@ const GraphPage: React.FC = () => {
         }
       },
       title: {
-        text: 'Article Statistics (Bubble Chart)',
-        align: 'center',
+        text: 'Article Statistics',
+        align: 'center' as 'center', // Explicitly type align as 'center'
         style: {
           fontSize: '20px',
           color: '#333'
         }
+      }
+      
       }
     },
     series: [
