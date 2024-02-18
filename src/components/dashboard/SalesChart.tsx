@@ -22,7 +22,7 @@ const SalesChart: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/news/get-news-with-common');
+      const response = await fetch('https://finalhacathonbackend.vercel.app/news/get-news-with-common');
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
