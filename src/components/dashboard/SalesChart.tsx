@@ -22,7 +22,7 @@ const SalesChart: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('https://finalhacathonbackend.vercel.app/news/get-news-with-common');
+      const response = await fetch('http://localhost:3000/news/get-news-with-common');
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -38,26 +38,18 @@ const SalesChart: React.FC = () => {
 
   const chartOptions: ApexOptions = {
     chart: {
-      type: 'area',
+      type: 'bar',
+      stacked: false,
     },
-    dataLabels: {
-      enabled: false,
-    },
-    grid: {
-      strokeDashArray: 3,
-      borderColor: 'rgba(0,0,0,0.1)',
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 1,
+    plotOptions: {
+      bar: {
+        horizontal: false,
+      },
     },
     xaxis: {
-      categories: domainRanks.map(String), // Convert domainRanks to strings
+      categories: domainRanks.map(String),
       title: {
-        text: '',
-      },
-      labels: {
-        show: false,
+        text: 'Domain Rank',
       },
     },
     yaxis: [
@@ -65,53 +57,31 @@ const SalesChart: React.FC = () => {
         title: {
           text: 'Participants Count',
         },
-        opposite: false,
       },
       {
+        opposite: true,
         title: {
           text: 'Domain Rank',
         },
-        opposite: true,
       },
     ],
     tooltip: {
       enabled: true,
       intersect: false,
       shared: false,
-      x: {
-        show: true,
-        formatter: (val: number) => `Domain Rank: ${val}`, // Use val as a number
-      },
-      y: [
-        {
-          formatter: (val: number) => `Participants Count: ${val}`, // Use val as a number
-        },
-        {
-          formatter: (val: number) => `Domain Rank: ${val}`, // Use val as a number
-        },
-      ],
     },
-    colors: ['#ff0000', '#00ff00'], // Red for Domain Rank, Green for Participants Count
-    fill: {
-      type: 'solid',
-      colors: ['#ff000080', '#00ff0080'], // Transparent fill for area charts
-    },
-    markers: {
-      size: 1,
-      colors: ['#ff0000', '#00ff00'],
-    },
+    colors: ['#00ff00', '#ff0000'], // Green for Participants Count, Red for Domain Rank
   };
+  
 
   const series = [
     {
       name: 'Participants Count',
-      data: participantsCounts.map((count, index) => ({ x: domainRanks[index], y: count })),
-      type: 'line',
+      data: participantsCounts,
     },
     {
       name: 'Domain Rank',
-      data: domainRanks.map((rank, index) => ({ x: domainRanks[index], y: rank })),
-      type: 'area',
+      data: domainRanks,
     },
   ];
 
@@ -123,7 +93,7 @@ const SalesChart: React.FC = () => {
           Sales Summary
         </CardSubtitle>
         <Chart
-          type="area"
+          type="bar"
           width="100%"
           height={390}
           options={chartOptions}
